@@ -1,0 +1,94 @@
+<%- include('partials/header')-%>
+
+    <div class="container">
+        <div class="row">
+            <div class="col text-center" style="padding-top: 50px;">
+                <h2>User Register</h2>
+
+                <form class="addForm">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Enter Email" name="email" onkeydown="emailClear()">
+                    </div>
+                    <span class="isempty1"></span>
+                         
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Enter Password" name="password" onkeydown="passwordClear()"> 
+                    </div>
+                     
+                    <span class="isempty2"></span><br>
+
+                    <button class="btn btn-primary" onclick="myfunction()">SIGN UP</button> <br><br>
+                    <div class="result1">
+                        <h2 class="result"></h2>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+ <%- include('partials/footer') -%>
+
+        <script>
+            const form = document.querySelector('.addForm');
+            const result = document.querySelector('.result'); 
+            const isempty1 =document.querySelector('.isempty1');
+            const isempty2=document.querySelector('.isempty2');
+
+            form.addEventListener('submit', async(e) => {
+                e.preventDefault();
+
+                 email = form.email.value;
+                 password = form.password.value;
+
+                 if(email.length==0){
+                     isempty1.textContent="Enter Email";
+                     setTimeout(3000);
+                 }
+                 if(password.length==0){
+                     isempty2.textContent="Enter password";
+                     return ;
+                 }
+                
+                      
+                try {
+                    
+                        const res = await fetch('/signup', {
+                        method: 'POST',
+                        body: JSON.stringify({
+
+                            email:email,
+                            password:password,
+                        
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json' //what type of data youre sending
+                        }
+                    });
+                      
+                    
+                   
+                    
+                      const data = await res.json();
+                      console.log(data);
+
+                      result.textContent = data.msg;
+                      
+                  
+
+                } catch (err) {
+
+                }
+            
+            });
+            function emailClear(){
+                isempty1.textContent="";
+            }
+            function passwordClear(){
+                isempty2.textContent="";
+            }
+           function myfunction(){
+               setTimeout(emailClear,3000);
+               setTimeout(passwordClear,3000);
+           }
+        
+        </script>
